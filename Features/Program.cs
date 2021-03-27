@@ -29,13 +29,7 @@ namespace Features
             //    Console.WriteLine(enumerator.Current.Name);
             //}
 
-            foreach (var employee in developers.Where(
-                                        delegate (Employee employee)
-                                                {
-                                                   return employee.Name.StartsWith("S");
-                                                 }
-                                         )
-                    )
+            foreach (var employee in developers.Where(e => e.Name.StartsWith("S")))
             {
                 Console.WriteLine(employee.Name);
             }
