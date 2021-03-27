@@ -20,24 +20,11 @@ namespace Features
                 new Employee {Id = 3, Name  = "Alex"}
             };
 
-            //Console.WriteLine(sales.Count());
-            //Console.WriteLine(developers.Count());
-
-            //IEnumerator<Employee> enumerator = developers.GetEnumerator();
-            //while (enumerator.MoveNext())
-            //{
-            //    Console.WriteLine(enumerator.Current.Name);
-            //}
-
             foreach (var employee in developers.Where(e => e.Name.StartsWith("S")))
             {
                 Console.WriteLine(employee.Name);
             }
         }
 
-        //private static bool NameStartsWithS(Employee employee)
-        //{
-        //    return employee.Name.StartsWith("S");
-        //}
     }
 }
