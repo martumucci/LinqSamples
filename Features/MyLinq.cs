@@ -14,7 +14,7 @@ namespace Features.Linq
         /// <returns></returns>
         public static int Count<T>(this IEnumerable<T> sequence) //Extension method
         {
-            int count = 0;
+            var count = 0;
             foreach (var item in sequence)
             {
                 count += 1;
