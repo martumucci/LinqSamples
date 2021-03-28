@@ -34,7 +34,9 @@ namespace Features
                 new Employee {Id = 3, Name  = "Alex"}
             };
 
-            var query = developers.Where(e => e.Name.Length == 5)
+            // Query1 and Query2 are equivalent
+
+            var query1 = developers.Where(e => e.Name.Length == 5)
                                                .OrderBy(e => e.Name);
 
             var query2 = from developer in developers 
