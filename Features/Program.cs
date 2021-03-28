@@ -40,7 +40,7 @@ namespace Features
             var query2 = from developer in developers 
                          where developer.Name.Length == 5 
                          orderby developer.Name 
-                         select developer;
+                         select developer; // query syntax starts with from and ends with select or group
 
             foreach (var employee in query2)
             {
