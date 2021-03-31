@@ -8,6 +8,13 @@ namespace Queries
     {
         static void Main(string[] args)
         {
+            var numbers = MyLinq.Random().Where(n=>n>0.5).Take(10);
+
+            foreach (var number in numbers)
+            {
+                Console.WriteLine(number);
+            }
+
             var movies = new List<Movie>
             {
                 new Movie {Title = "The Dark Knight Rises", Rating = 8.9f, Year = 2012},
@@ -15,6 +22,8 @@ namespace Queries
                 new Movie {Title = "Casablanca", Rating = 8.5f, Year = 1942},
                 new Movie {Title = "Star Wars V", Rating = 8.7f, Year = 1980}
             };
+
+            // Classification of standard linq operators (msdn search)
 
             var query = movies.Where(m => m.Year >= 2000) // where is a streaming operator
                                .OrderByDescending(m => m.Rating); // OrderBy does not offer streaming
