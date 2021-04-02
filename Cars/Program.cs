@@ -21,6 +21,11 @@ namespace Cars
 
             var result = cars.Any(c => c.Manufacturer == "Ford"); //  .All()
 
+            var query3 = cars.Where(c => c.Manufacturer == "BMW" && c.Year == 2016)
+                            .OrderByDescending(c => c.Combined)
+                            .ThenBy(c => c.Name)
+                            .Select(c => new { c.Manufacturer, c.Name, c.Combined }); // anonymous type
+
             foreach (var car in query.Take(10))
             {
                 Console.WriteLine($"{car.Name} : {car.Combined}");
