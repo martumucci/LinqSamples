@@ -13,13 +13,18 @@ namespace Cars
             var cars = ProcessCars("fuel.csv");
             var manufacturers = ProcessManufacturers("manufacturers.csv");
 
-            var query = cars.GroupBy(c=>c.Manufacturer.ToUpper())
-                            .OrderBy(g => g.Key);
+            var query = manufacturers.GroupJoin(cars, m => m.Name, c => c.Manufacturer, (m, gc) =>
+                                                new
+                                                {
+                                                    Manufacturer = m,
+                                                    Cars = gc
+                                                })
+                                     .OrderBy(m => m.Manufacturer.Name);
 
             foreach (var group in query)
             {
-                Console.WriteLine(group.Key);
-                foreach (var car in group.OrderByDescending(c=>c.Combined).Take(2))
+                Console.WriteLine($"{group.Manufacturer.Name} : {group.Manufacturer.Headquarters}");
+                foreach (var car in group.Cars.OrderByDescending(c => c.Combined).Take(2))
                 {
                     Console.WriteLine($"\t{car.Name} : {car.Combined}");
                 }
