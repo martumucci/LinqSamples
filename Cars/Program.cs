@@ -13,23 +13,28 @@ namespace Cars
             var cars = ProcessCars("fuel.csv");
             var manufacturers = ProcessManufacturers("manufacturers.csv");
 
-            var query = manufacturers.GroupJoin(cars, m => m.Name, c => c.Manufacturer, (m, gc) =>
-                                                new
-                                                {
-                                                    Manufacturer = m,
-                                                    Cars = gc
-                                                })
-                                     .GroupBy(m => m.Manufacturer.Headquarters);
+            var query = cars.GroupBy(c => c.Manufacturer)
+                            .Select(g =>
+                            {
+                                var results = g.Aggregate(new CarStatistics(),
+                                                          (acc, c) => acc.Accumulate(c),
+                                                          acc => acc.Compute());
+                                return new
+                                {
+                                    Name = g.Key,
+                                    Avg = results.Average,
+                                    results.Max,
+                                    results.Min
+                                };
+                            })
+                            .OrderByDescending(r => r.Max);
 
-            foreach (var group in query)
+            foreach (var result in query)
             {
-                Console.WriteLine($"{group.Key}");
-                foreach (var car in group.SelectMany(g => g.Cars)
-                                         .OrderByDescending(c => c.Combined)
-                                         .Take(3))
-                {
-                    Console.WriteLine($"\t{car.Name} : {car.Combined}");
-                }
+                Console.WriteLine($"{result.Name}");
+                Console.WriteLine($"\t Max: {result.Max}");
+                Console.WriteLine($"\t Min: {result.Min}");
+                Console.WriteLine($"\t Avg: {result.Avg}");
             }
 
             //var query = cars.Join(manufacturers, 
@@ -126,6 +131,37 @@ namespace Cars
         //    return query2.ToList();
         //}
 
+    }
+
+    public class CarStatistics
+    {
+        public CarStatistics()
+        {
+            Max = Int32.MinValue;
+            Min = Int32.MaxValue;
+        }
+        public CarStatistics Accumulate(Car car)
+        {
+            Count += 1;
+            Total += car.Combined;
+            Max = Math.Max(Max, car.Combined);
+            Min = Math.Min(Min, car.Combined);
+            return this;
+        }
+
+        public CarStatistics Compute()
+        {
+            Average = Total / Count;
+            return this;
+        }
+
+        public int Max { get; set; }
+        public int Min { get; set; }
+        public int Total { get; set; }
+        public int Count { get; set; }
+        public double Average { get; set; }
+
+        
     }
 
     public static class CarExtensions
