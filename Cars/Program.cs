@@ -19,12 +19,14 @@ namespace Cars
                                                     Manufacturer = m,
                                                     Cars = gc
                                                 })
-                                     .OrderBy(m => m.Manufacturer.Name);
+                                     .GroupBy(m => m.Manufacturer.Headquarters);
 
             foreach (var group in query)
             {
-                Console.WriteLine($"{group.Manufacturer.Name} : {group.Manufacturer.Headquarters}");
-                foreach (var car in group.Cars.OrderByDescending(c => c.Combined).Take(2))
+                Console.WriteLine($"{group.Key}");
+                foreach (var car in group.SelectMany(g => g.Cars)
+                                         .OrderByDescending(c => c.Combined)
+                                         .Take(3))
                 {
                     Console.WriteLine($"\t{car.Name} : {car.Combined}");
                 }
