@@ -26,10 +26,17 @@ namespace Cars
                             .ThenBy(c => c.Name)
                             .Select(c => new { c.Manufacturer, c.Name, c.Combined }); // anonymous type
 
-            foreach (var car in query.Take(10))
+            var query4 = cars.SelectMany(c => c.Name); 
+
+            foreach (var name in query4)
             {
-                Console.WriteLine($"{car.Name} : {car.Combined}");
+                Console.WriteLine(name);
             }
+
+            //foreach (var car in query.Take(10))
+            //{
+            //    Console.WriteLine($"{car.Name} : {car.Combined}");
+            //}
         }
 
         private static List<Car> ProcessFile(string path)
