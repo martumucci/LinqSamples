@@ -14,8 +14,8 @@ namespace Cars
             var manufacturers = ProcessManufacturers("manufacturers.csv");
 
             var query = cars.Join(manufacturers, 
-                                  c => c.Manufacturer, 
-                                  m => m.Name, 
+                                  c => new { c.Manufacturer, c.Year }, 
+                                  m => new { Manufacturer = m.Name, m.Year }, 
                                   (c, m) => new 
                                   { 
                                       m.Headquarters, 
