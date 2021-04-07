@@ -10,49 +10,8 @@ namespace Cars
         /// ***********Second Main***********
         static void Main(string[] args)
         {
-            var cars = ProcessCars("fuel.csv");
-            var manufacturers = ProcessManufacturers("manufacturers.csv");
-
-            var query = cars.GroupBy(c => c.Manufacturer)
-                            .Select(g =>
-                            {
-                                var results = g.Aggregate(new CarStatistics(),
-                                                          (acc, c) => acc.Accumulate(c),
-                                                          acc => acc.Compute());
-                                return new
-                                {
-                                    Name = g.Key,
-                                    Avg = results.Average,
-                                    results.Max,
-                                    results.Min
-                                };
-                            })
-                            .OrderByDescending(r => r.Max);
-
-            foreach (var result in query)
-            {
-                Console.WriteLine($"{result.Name}");
-                Console.WriteLine($"\t Max: {result.Max}");
-                Console.WriteLine($"\t Min: {result.Min}");
-                Console.WriteLine($"\t Avg: {result.Avg}");
-            }
-
-            //var query = cars.Join(manufacturers, 
-            //                      c => new { c.Manufacturer, c.Year }, 
-            //                      m => new { Manufacturer = m.Name, m.Year }, 
-            //                      (c, m) => new 
-            //                      { 
-            //                          m.Headquarters, 
-            //                          c.Name, 
-            //                          c.Combined 
-            //                      })
-            //                .OrderByDescending(c => c.Combined)
-            //                .ThenBy(c => c.Name);
-
-            //foreach (var car in query.Take(10))
-            //{
-            //    Console.WriteLine($"{car.Headquarters} {car.Name} : {car.Combined}");
-            //}
+            var records = ProcessCars("fuel.csv");
+           
         }
 
         private static List<Car> ProcessCars(string path)
@@ -81,55 +40,6 @@ namespace Cars
                             });
             return query.ToList();
         }
-
-        /// ***********First Main***********
-        //static void Main(string[] args)
-        //{
-        //    var cars = ProcessFile("fuel.csv");
-
-        //    var query = cars.Where(c => c.Manufacturer == "BMW" && c.Year == 2016)
-        //                    .OrderByDescending(c => c.Combined)
-        //                    .ThenBy(c => c.Name); // using another orderBy would reorder everything
-
-        //    var top = cars.OrderByDescending(c => c.Combined)
-        //                  .ThenBy(c => c.Name)
-        //                  .First(c => c.Manufacturer == "BMW" && c.Year == 2016); //  .Last()
-
-        //    var result = cars.Any(c => c.Manufacturer == "Ford"); //  .All()
-
-        //    var query3 = cars.Where(c => c.Manufacturer == "BMW" && c.Year == 2016)
-        //                    .OrderByDescending(c => c.Combined)
-        //                    .ThenBy(c => c.Name)
-        //                    .Select(c => new { c.Manufacturer, c.Name, c.Combined }); // anonymous type
-
-        //    var query4 = cars.SelectMany(c => c.Name); 
-
-        //    foreach (var name in query4)
-        //    {
-        //        Console.WriteLine(name);
-        //    }
-
-        //    //foreach (var car in query.Take(10))
-        //    //{
-        //    //    Console.WriteLine($"{car.Name} : {car.Combined}");
-        //    //}
-        //}
-
-        //private static List<Car> ProcessFile(string path)
-        //{
-        //    var query = File.ReadAllLines(path)
-        //        .Skip(1)
-        //        .Where(l => l.Length > 1)
-        //        .Select(Car.ParseFromCsv)
-        //        .ToList();
-
-        //    var query2 = File.ReadAllLines(path)
-        //        .Skip(1)
-        //        .Where(l => l.Length > 1)
-        //        .ToCar();
-
-        //    return query2.ToList();
-        //}
 
     }
 
