@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace Cars
 {
@@ -10,8 +11,32 @@ namespace Cars
         /// ***********Second Main***********
         static void Main(string[] args)
         {
+            CreateXml();
+            QueryXml();
+        }
+
+        private static void QueryXml()
+        {
+            var document = XDocument.Load("fuel.xml");
+
+            var query = document.Element("Cars").Elements("Car")
+                                .Where(c => c.Attribute("Manufacturer")?.Value == "BMW")
+                                .Select(c => c.Attribute("Name").Value);
+        }
+
+        private static void CreateXml()
+        {
             var records = ProcessCars("fuel.csv");
-           
+
+            var document = new XDocument();
+            var cars = records.Select(c => new XElement("Car",
+                                                        new XAttribute("Name", c.Name),
+                                                        new XAttribute("Combined", c.Combined),
+                                                        new XAttribute("Manufacturer", c.Manufacturer))
+                                     );
+
+            document.Add(cars);
+            document.Save("fuel.xml");
         }
 
         private static List<Car> ProcessCars(string path)
@@ -71,7 +96,7 @@ namespace Cars
         public int Count { get; set; }
         public double Average { get; set; }
 
-        
+
     }
 
     public static class CarExtensions
